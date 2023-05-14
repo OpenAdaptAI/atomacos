@@ -16,6 +16,12 @@ from ApplicationServices import (
 from CoreFoundation import CFArrayGetTypeID, CFGetTypeID, CFStringGetTypeID
 
 
+CGRect = namedtuple("CGRect", ["x", "y", "width", "height"])
+CFRange = namedtuple("CFRange", ["location", "length"])
+CGPoint = namedtuple("CGPoint", ["x", "y"])
+CGSize = namedtuple("CGSize", ["width", "height"])
+
+
 class Converter:
     def __init__(self, axuielementclass=None):
         self.app_ref_class = axuielementclass
@@ -49,28 +55,24 @@ class Converter:
 
     def convert_size(self, value):
         repr_searched = re.search("{.*}", str(value)).group()
-        CGSize = namedtuple("CGSize", ["width", "height"])
         size = NSSizeFromString(repr_searched)
 
         return CGSize(size.width, size.height)
 
     def convert_point(self, value):
         repr_searched = re.search("{.*}", str(value)).group()
-        CGPoint = namedtuple("CGPoint", ["x", "y"])
         point = NSPointFromString(repr_searched)
 
         return CGPoint(point.x, point.y)
 
     def convert_range(self, value):
         repr_searched = re.search("{.*}", str(value)).group()
-        CFRange = namedtuple("CFRange", ["location", "length"])
         range = NSRangeFromString(repr_searched)
 
         return CFRange(range.location, range.length)
 
     def convert_rect(self, value):
         repr_searched = re.search("{.*}", str(value)).group()
-        CGRect = namedtuple("CGRect", ["x", "y", "width", "height"])
         rect = NSRectFromString(repr_searched)
 
         return CGRect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height)
